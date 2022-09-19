@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  pickles-api:
+    container_name: pickles-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    working_dir: /app
+    volumes:
+      - ./:/app/
+    networks:
+      - pickles-api
+    depends_on:
+      - pickles-database
+
+  pickles-database:
+    container_name: pickles-database
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_TCP_PORT= ${DB_PORT}
+    ports:
+      - "56198:56198"
+    volumes:
+      - pickles-msdata:/var/lib/mysql
+    networks:
+      - pickles-api
+
+networks:
+  pickles-api:
+    driver: bridge
+
+volumes:
+  pickles-msdata:
