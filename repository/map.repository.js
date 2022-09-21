@@ -21,7 +21,7 @@ Map.createMap = async (map, resultFunc) => {
         return resultFunc(err, null);
     }
     console.log("Map is created.");
-    return resultFunc(err, createdMap);
+    return resultFunc(null, createdMap);
 }
 
 Map.findAllMaps = (resultFunc) => {
@@ -52,17 +52,23 @@ Map.findAllMapsByTag = (map_tag, resultFunc) => {
     });
 }
 
-Map.updateMapInfo = async (forUpdate, resultFunc) => {
+Map.updateMapInfo = async (map_id, forUpdate, resultFunc) => {
     try {
         await sequelize.transaction(async trans => {
             await model.Map.update(
                 forUpdate,
-                {}
-            )
+                {
+                    where: {map_id: map_id},
+                    transaction: trans
+                }
+            );
         })
     } catch(err) {
-
+        console.log("updateMapInfo err", err);
+        return resultFunc(err, null);
     }
+    console.log("updateMapInfo done");
+    return resultFunc(null, "done");
 }
 
 Map.deleteMap = async (map_id, resultFunc) => {

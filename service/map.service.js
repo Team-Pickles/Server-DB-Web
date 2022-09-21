@@ -44,7 +44,27 @@ exports.getMapListByTag = (req, res) => {
                     message: "getMapListByTag err"
                 });
             } else {
-                res.send({result: result, map_tag: req.params.map_tag});
+                res.send(result);
+            }
+        });
+    }
+}
+
+exports.updateMapInfo = (req, res) => {
+    if(!req.body) {
+        res.status(400).send({
+            message: "req.body can not be empty!"
+        });
+    } else {
+        map.updateMapInfo(req.body.map_id, req.body.forUpdate, (err, result) => {
+            if(err) {
+                res.status(400).send({
+                    message: "updateMap err"
+                });
+            } else {
+                res.send({
+                    map_id: req.body.map_id
+                });
             }
         });
     }
