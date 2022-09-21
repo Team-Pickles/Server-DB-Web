@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const apiroutes = require("./controller/api/");
-const docs = require("./controller/api/docs.controller")
+const docs = require("./controller/api/docs.controller");
 const { sequelize } = require("./models");
 
 const app = express();
@@ -32,7 +32,7 @@ app.get("/",(req,res) => {
     res.sendFile(__dirname + '/login_test.html');
 });
 
-app.use('/',apiroutes);
+app.use('/api',apiroutes);
 app.use('/docs',docs);
 
 app.set('port', process.env.PORT || 3001);
