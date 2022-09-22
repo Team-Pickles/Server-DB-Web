@@ -21,7 +21,7 @@ Map.createMap = async (map, resultFunc) => {
         return resultFunc(err, null);
     }
     console.log("Map is created.");
-    return resultFunc(err, createdMap);
+    return resultFunc(null, createdMap);
 }
 
 Map.findAllMaps = (resultFunc) => {
