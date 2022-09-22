@@ -24,6 +24,7 @@ sequelize.sync({ force: false })
     console.log('Successfully connected');
   })
   .catch((err) => {
+    console.log('DB Connection err');
     console.error(err);
 });
 
