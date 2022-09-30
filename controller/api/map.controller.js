@@ -7,15 +7,16 @@ const router = express.Router();
  * PUT: 전체 수정
  * PATCH: 일부 수정
  */
-router.post("/apply", map.applyMap);
+router.put("/apply", map.applyMap);
 router.get("/getAllList", map.getAllMapList);
 router.get("/getListByTag/:map_tag", map.getMapListByTag);
+router.patch("/update", map.updateMapInfo);
 router.delete("/delete/:map_id", map.deleteMap);
 
 /**
  * @swagger
  * /api/map/apply:
- *   post:
+ *   put:
  *     summary: Apply map
  *     description: make map
  *     tags: [Map]
@@ -105,6 +106,51 @@ router.delete("/delete/:map_id", map.deleteMap);
  *                 type: array
  *             example:
  *               $ref: '#/components/schemas/Order'
+ *       "400":
+ *         $ref: '#/components/responses/ApplyError'
+ */
+
+/**
+ * @swagger
+ * /api/map/update:
+ *   patch:
+ *     summary: Update map by map_id
+ *     description: Update map by map_id
+ *     tags: [Map]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - map_id
+ *               - forUpdate
+ *             properties:
+ *               map_id:
+ *                 type: integer
+ *               forUpdate:
+ *                 type: object
+ *             example:
+ *               map_id: 1
+ *               forUpdate: {
+ *                 map_difficulty: 5,
+ *                 map_grade: 2
+ *               }
+ *     responses:
+ *       "200":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *                type: object
+ *             properties:
+ *               map_id:
+ *                 type: integer
+ *             example:
+ *               map_id: 3
  *       "400":
  *         $ref: '#/components/responses/ApplyError'
  */
