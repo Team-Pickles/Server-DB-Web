@@ -35,7 +35,7 @@ router.delete("/delete/:map_id", map.deleteMap);
  *                 type: json
  *             example:
  *               map_info: {
- *                  example: "example"
+ *                 example: "example"
  *               }
  *     responses:
  *       "200":
@@ -80,7 +80,18 @@ router.delete("/delete/:map_id", map.deleteMap);
  *               result:
  *                 type: array
  *             example:
- *               $ref: '#/components/schemas/Order'
+ *               [
+ *                 {
+ *                   "map_id": 1,
+ *                   "map_info": {
+ *                     "example": "example"
+ *                   },
+ *                   "map_tag": "none",
+ *                   "map_grade": 0,
+ *                   "map_difficulty": 0,
+ *                   "map_maker": null
+ *                 }
+ *               ]
  *       "400":
  *         $ref: '#/components/responses/ApplyError'
  */
@@ -105,7 +116,28 @@ router.delete("/delete/:map_id", map.deleteMap);
  *               message:
  *                 type: array
  *             example:
- *               $ref: '#/components/schemas/Order'
+ *               [
+ *                 {
+ *                   "map_id": 1,
+ *                   "map_info": {
+ *                     "example": "example"
+ *                   },
+ *                 "map_tag": "none",
+ *                 "map_grade": 0,
+ *                 "map_difficulty": 0,
+ *                 "map_maker": null
+ *                 },
+ *                 {
+ *                   "map_id": 2,
+ *                   "map_info": {
+ *                     "example": "example"
+ *                   },
+ *                 "map_tag": "example",
+ *                 "map_grade": 0,
+ *                 "map_difficulty": 0,
+ *                 "map_maker": null
+ *                 }
+ *               ]
  *       "400":
  *         $ref: '#/components/responses/ApplyError'
  */
@@ -150,7 +182,7 @@ router.delete("/delete/:map_id", map.deleteMap);
  *               map_id:
  *                 type: integer
  *             example:
- *               map_id: 3
+ *               map_id: 1
  *       "400":
  *         $ref: '#/components/responses/ApplyError'
  */
@@ -166,7 +198,7 @@ router.delete("/delete/:map_id", map.deleteMap);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         map_tag: map_id
+ *         map_id: map_id
  *         required: true
  *         schema:
  *           type: integer
@@ -182,9 +214,20 @@ router.delete("/delete/:map_id", map.deleteMap);
  *               result:
  *                 type: string
  *             example:
- *                 message: 'map(${req.params.map_id}) was successfully deleted'
- *       "400":
- *         $ref: '#/components/responses/ApplyError'
+ *                 message: 'map(2) was successfully deleted'
+ *       "401":
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *                type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *             example:
+ *               {
+ *                 "message": "Unauthorized"
+ *               }
  */
 
 module.exports = router;
