@@ -13,7 +13,7 @@ Map.createMap = async (map, resultFunc) => {
                 map_tag: map.map_tag != null ? map.map_tag : "none",
                 map_grade: map.map_grade != null ? map.map_grade : 0,
                 map_difficulty: map.map_difficulty != null ? map.map_grade : 0,
-                map_maker: map.map_maker != null ? map.map_maker : "unknown"
+                map_maker: map.map_maker
             }, {transaction: trans});
         })
     } catch(err) {
@@ -34,7 +34,7 @@ Map.findAllMaps = (resultFunc) => {
         return resultFunc(null, result);
     }).catch((err) => {
         console.log("findAllMaps err", err);
-        return results(err, null);
+        return resultFunc(err, null);
     });
 }
 
@@ -48,7 +48,7 @@ Map.findAllMapsByTag = (map_tag, resultFunc) => {
         return resultFunc(null, result);
     }).catch((err) => {
         console.log("findAllMapsByTag err", err);
-        return results(err, null);
+        return resultFunc(err, null);
     });
 }
 

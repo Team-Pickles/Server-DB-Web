@@ -1,5 +1,6 @@
 const docsRoute = require('./docs.controller');
 const mapRoute = require('./map.controller');
+const userRoute = require('./user.controller');
 const express = require('express');
 const router = express.Router();
 
@@ -8,7 +9,10 @@ const defaultRoutes = [
     path: '/map',
     route: mapRoute,
   },
-
+  {
+    path: '/user',
+    route: userRoute,
+  },
 ];
 
 const devRoutes = [
