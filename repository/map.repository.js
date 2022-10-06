@@ -1,11 +1,32 @@
 const model = require("../models");
 const { Op } = require("sequelize");
 const sequelize = model.sequelize;
+const user = require("./user.repository");
 
 const Map = {}
 
+const findUserById = async (user_id) => {
+    let result;
+    const func = async () => {
+      const tmp = await user.findUserByIdForGetData(user_id);
+      result = tmp;
+    };
+    await func();
+    return {ok: result !== undefined, user: result}
+};
+
 Map.createMap = async (map, resultFunc) => {
     let createdMap;
+    let map_maker = map.map_maker;
+    if (map.map_maker) {
+        const temp = await findUserById(map.map_maker);
+        if(temp.ok){
+            map_maker = temp.user.user_id;
+            console.log(map_maker);
+        } else {
+            return resultFunc("Wrong user id", null);
+        }
+    }
     try {
         await sequelize.transaction(async trans => {
             createdMap = await model.Map.create({
@@ -13,7 +34,7 @@ Map.createMap = async (map, resultFunc) => {
                 map_tag: map.map_tag != null ? map.map_tag : "none",
                 map_grade: map.map_grade != null ? map.map_grade : 0,
                 map_difficulty: map.map_difficulty != null ? map.map_grade : 0,
-                map_maker: map.map_maker
+                map_maker: map_maker
             }, {transaction: trans});
         })
     } catch(err) {
@@ -85,6 +106,17 @@ Map.deleteMap = async (map_id, resultFunc) => {
 
     console.log(`Map(${map_id}) is deleted.`);
     return resultFunc(null, "done");
+}
+
+Map.findMapById = async (map_id) => {
+    const result = await model.Map.findOne({raw: true,
+        where: {map_id: map_id},
+        attributes: ['map_id', 'map_info', 'map_tag', 'map_grade', 'map_difficulty', 'map_maker']});
+    if(result === null) {
+        console.log("not found");
+    } else {
+        return result;
+    }
 }
 
 module.exports = Map;

@@ -28,7 +28,7 @@ module.exports = class User extends Sequelize.Model {
         sequelize,
         timestamps: true,
         tableName: "user",
-        paranoid: true, // 삭제일 (복구용)
+        paranoid: false, // 삭제일 (복구용)
         charset: "utf8",
         collate: "utf8_general_ci", // 삭제일 (복구용)
       }

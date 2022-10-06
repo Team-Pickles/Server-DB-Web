@@ -1,6 +1,7 @@
 const express = require('express');
 const map = require("../../service/map.service.js");
 const router = express.Router();
+const authJwt = require("../middleware/authJwt");
 
 /**
  * POST: 생성
@@ -11,7 +12,7 @@ router.put("/apply", map.applyMap);
 router.get("/getAllList", map.getAllMapList);
 router.get("/getListByTag/:map_tag", map.getMapListByTag);
 router.patch("/update", map.updateMapInfo);
-router.delete("/delete/:map_id", map.deleteMap);
+router.delete("/delete/:map_id", authJwt, map.deleteMap);
 
 /**
  * @swagger

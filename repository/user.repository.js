@@ -91,4 +91,15 @@ User.deleteUser = async (user_id, resultFunc) => {
     return resultFunc(null, "done");
 }
 
+User.findUserByIdForGetData = async (user_id) => {
+  const result = await model.User.findOne({raw: true,
+    where: {user_id: user_id},
+    attributes: ["user_id", "username", "password", "email"]});
+  if(result === null) {
+      console.log("not found");
+  } else {
+      return result;
+  }
+}
+
 module.exports = User;
