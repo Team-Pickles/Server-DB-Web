@@ -97,6 +97,6 @@ exports.deleteUser = (req, res) => {
                     message: `User(${req.params.user_id}) was successfully deleted`
                 });
             }
-        })
+        });
     }
 }

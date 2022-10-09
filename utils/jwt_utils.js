@@ -15,7 +15,8 @@ module.exports = {
             decoded = jwt.verify(token, JWT_SECRET);
             return {
                 ok: true,
-                id: decoded.id
+                id: decoded.id,
+                exp: decoded.exp.toString()
             };
         } catch(err) {
             return {

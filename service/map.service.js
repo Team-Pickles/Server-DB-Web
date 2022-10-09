@@ -1,12 +1,23 @@
 const map = require("../repository/map.repository.js");
 const data = require("../utils/getData_utils");
 
-exports.applyMap = (req, res) => {
+exports.applyMap = async (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: "req.body can not be empty!",
     });
   } else {
+    if (req.body.map_maker) {
+      const temp = await data.findUserById(req.body.map_maker);
+      if(temp.ok){
+          console.log(req.body.map_maker);
+      } else {
+        res.status(400).send({
+          message: "applyMap err",
+        });
+        return;
+      }
+    }
     map.createMap(req.body, (err, result) => {
       if (err) {
         res.status(400).send({
@@ -36,7 +47,7 @@ exports.getAllMapList = (req, res) => {
 exports.getMapListByTag = (req, res) => {
   if (!req.params) {
     res.status(400).send({
-      message: "req.body can not be empty!",
+      message: "req.params can not be empty!",
     });
   } else {
     map.findAllMapsByTag(req.params.map_tag, (err, result) => {

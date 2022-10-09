@@ -1,32 +1,11 @@
 const model = require("../models");
-const { Op } = require("sequelize");
 const sequelize = model.sequelize;
-const user = require("./user.repository");
 
-const Map = {}
-
-const findUserById = async (user_id) => {
-    let result;
-    const func = async () => {
-      const tmp = await user.findUserByIdForGetData(user_id);
-      result = tmp;
-    };
-    await func();
-    return {ok: result !== undefined, user: result}
-};
+const Map = {};
 
 Map.createMap = async (map, resultFunc) => {
     let createdMap;
     let map_maker = map.map_maker;
-    if (map.map_maker) {
-        const temp = await findUserById(map.map_maker);
-        if(temp.ok){
-            map_maker = temp.user.user_id;
-            console.log(map_maker);
-        } else {
-            return resultFunc("Wrong user id", null);
-        }
-    }
     try {
         await sequelize.transaction(async trans => {
             createdMap = await model.Map.create({
@@ -108,7 +87,7 @@ Map.deleteMap = async (map_id, resultFunc) => {
     return resultFunc(null, "done");
 }
 
-Map.findMapById = async (map_id) => {
+Map.findMapByIdForGetData = async (map_id) => {
     const result = await model.Map.findOne({raw: true,
         where: {map_id: map_id},
         attributes: ['map_id', 'map_info', 'map_tag', 'map_grade', 'map_difficulty', 'map_maker']});

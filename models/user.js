@@ -37,5 +37,6 @@ module.exports = class User extends Sequelize.Model {
 
   static associate(db) {
     db.User.hasMany(db.Map, { foreignKey: {name: "map_maker", allowNull: true}, sourceKey: "user_id" });
+    db.User.hasOne(db.LoginInfo, { foreignKey: 'id', sourceKey: "user_id" });
   }
 };

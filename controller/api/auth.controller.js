@@ -1,10 +1,12 @@
 const express = require('express');
 const auth = require('../../service/auth.service');
+const authJwt = require("../middleware/authJwt");
 
 const router = express.Router();
 
 router.post("/refresh", auth.refresh);
 router.post("/login", auth.login);
+router.post("/logout", authJwt, auth.logout);
 
 /**
  * @swagger
@@ -46,12 +48,12 @@ router.post("/login", auth.login);
  *                 type: object
  *             example:
  *               "ok": true,
- *               "data": {
+ *               "tokens": {
  *                 "accessToken": "accessToken",
  *                 "refreshToken": "refreshToken"
  *               }
  *       "400":
- *         description: Wrong id or password
+ *         description: error
  *         content:
  *           application/json:
  *             schema:
@@ -99,12 +101,12 @@ router.post("/login", auth.login);
  *                 type: object
  *             example:
  *               "ok": true,
- *               "data": {
+ *               "tokens": {
  *                 "accessToken": "accessToken",
  *                 "refreshToken": "refreshToken"
  *               }
  *       "400":
- *         description: Access token is not expired.
+ *         description: error
  *         content:
  *           application/json:
  *             schema:
@@ -117,6 +119,43 @@ router.post("/login", auth.login);
  *             example:
  *               "ok": false
  *               "message": "Acess token is not expired!"
+ */
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   delete:
+ *     summary: Logout
+ *     description: Logout
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: Ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             properties:
+ *               result:
+ *                 type: string
+ *             example:
+ *                 message: 'Logout success'
+ *       "401":
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *                type: object
+ *             properties:
+ *               ok:
+ *                 type: bool
+ *               message:
+ *                 type: string
+ *             example:
+ *                 "ok": false
+ *                 "message": "Unauthorized"
  */
 
 module.exports = router;
