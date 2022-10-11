@@ -1,12 +1,13 @@
 const express = require('express');
 const user = require("../../service/user.service.js");
+const authJwt = require("../middleware/authJwt");
 const router = express.Router();
 
 router.put("/apply", user.applyUser);
 router.get("/getAllList", user.getAllUserList);
 router.get("/getUserById/:user_id", user.getUserById);
 router.patch("/update", user.updateUsername);
-router.delete("/delete/:user_id", user.deleteUser);
+router.delete("/delete/:user_id", authJwt, user.deleteUser);
 
 /**
  * @swagger
@@ -187,7 +188,7 @@ router.delete("/delete/:user_id", user.deleteUser);
  * /api/user/delete/{user_id}:
  *   delete:
  *     summary: Delete user by user_id
- *     description: Delete user by user_id
+ *     description: Delete user by user_id. You need jwtToken for delete.
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -217,12 +218,13 @@ router.delete("/delete/:user_id", user.deleteUser);
  *             schema:
  *                type: object
  *             properties:
- *               user_id:
- *                 type: integer
+ *               ok:
+ *                 type: bool
+ *               message:
+ *                 type: string
  *             example:
- *               {
+ *                 "ok": false
  *                 "message": "Unauthorized"
- *               }
  */
 
  module.exports = router;

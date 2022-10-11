@@ -44,6 +44,11 @@ exports.getUserById = (req, res) => {
                     message: "getUserById err"
                 });
             } else {
+                if(result == null){
+                    res.status(400).send({
+                        message: `There is no user(${req.params.user_id})`
+                    });
+                }
                 res.send(result);
             }
         });
@@ -76,11 +81,11 @@ exports.deleteUser = (req, res) => {
             message: "req.params can not be empty!"
         });
     }
-    // else if (!req.user) {
-    //     res.status(401).send({
-    //         message: "Unauthorized"
-    //     });
-    // }
+    else if (req.user !== req.params.user_id) {
+        res.status(401).send({
+            message: "Unauthorized. Can't delete another id."
+        });
+    }
     else {
         user.deleteUser(req.params.user_id, (err, results) => {
             if(err) {
@@ -92,6 +97,6 @@ exports.deleteUser = (req, res) => {
                     message: `User(${req.params.user_id}) was successfully deleted`
                 });
             }
-        })
+        });
     }
 }

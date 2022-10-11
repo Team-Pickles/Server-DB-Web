@@ -28,7 +28,7 @@ module.exports = class User extends Sequelize.Model {
         sequelize,
         timestamps: true,
         tableName: "user",
-        paranoid: true, // 삭제일 (복구용)
+        paranoid: false, // 삭제일 (복구용)
         charset: "utf8",
         collate: "utf8_general_ci", // 삭제일 (복구용)
       }
@@ -37,5 +37,6 @@ module.exports = class User extends Sequelize.Model {
 
   static associate(db) {
     db.User.hasMany(db.Map, { foreignKey: {name: "map_maker", allowNull: true}, sourceKey: "user_id" });
+    db.User.hasOne(db.LoginInfo, { foreignKey: 'id', sourceKey: "user_id" });
   }
 };
