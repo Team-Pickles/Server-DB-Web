@@ -129,10 +129,10 @@ module.exports = {
                 code: 200,
                 data: {
                     ok: true,
-                    tokens: {
+                    tokens: [{
                         accessToken,
                         refreshToken,
-                    },
+                    }],
                 }
             };
         }

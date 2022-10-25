@@ -24,7 +24,7 @@ services:
       - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
       - MARIADB_TCP_PORT= ${DB_PORT}
     ports:
-      - "56198:56198"
+      - ${DB_PORT}:${DB_PORT}
     networks:
       - pickles-api
 

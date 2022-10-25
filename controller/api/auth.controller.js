@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/refresh", auth.refresh);
 router.post("/login", auth.login);
-router.post("/logout", authJwt, auth.logout);
+router.delete("/logout", authJwt, auth.logout);
 
 /**
  * @swagger

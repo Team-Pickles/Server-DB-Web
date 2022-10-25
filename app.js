@@ -10,8 +10,7 @@ const app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));
 app.use( cors({ 
-    origin: [  
-      "http://localhost:8080","http://localhost:8081","http://localhost:3000" ], 
+    origin: "*", 
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
        preflightContinue: false, 
        optionsSuccessStatus: 204, 

@@ -65,10 +65,10 @@ const getNewTokenProcess = (decoded, access, refresh) => {
 };
 
 exports.login = async (req, res) => {
-  const id = req.body.id;
+  const user_id = req.body.user_id;
   const password = req.body.password;
 
-  const result = await data.findUserById(id);
+  const result = await data.findUserById(user_id);
 
   if (result.ok === false) {
     // 등록되지 않은 아이디인 경우
@@ -82,7 +82,7 @@ exports.login = async (req, res) => {
     const accessToken = jwt.sign(result.user.user_id);
     const refreshToken = jwt.refresh(result.user.user_id);
 
-    const tokenResult = await TokenManager.createLoginInfo(id, accessToken, refreshToken);
+    const tokenResult = await TokenManager.createLoginInfo(user_id, accessToken, refreshToken);
     return res.status(tokenResult.code).send(tokenResult.data);
   }
 };
