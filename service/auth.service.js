@@ -46,22 +46,27 @@ const getNewTokenProcess = (decoded, access, refresh) => {
         code: 200,
         result: {
           ok: true,
-          tokens: {
+          tokens: [{
             accessToken: newAccessToken,
             refreshToken: refresh.token,
-          }
+          }]
         },
       };
     }
-  } else
-    // access token이 아직 유효한 경우
+  }
+  else {
+    const newAccessToken = jwt.sign(decoded.id);
     return {
-      code: 400,
+      code: 200,
       result: {
-        ok: false,
-        message: "Acess token is not expired!",
+        ok: true,
+        tokens: [{
+          accessToken: newAccessToken,
+          refreshToken: refresh.token,
+        }]
       },
     };
+  }
 };
 
 exports.login = async (req, res) => {
