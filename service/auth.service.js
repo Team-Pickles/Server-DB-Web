@@ -2,7 +2,7 @@ const jwt = require("../utils/jwt_utils");
 const TokenManager = require("../utils/tokenManager");
 const data = require("../utils/getData_utils");
 
-const checkAuthorized = async (token) => {
+const checkAuthorized = async (token, isRefreshToken) => {
   const decoded = jwt.decode(token);
   // 잘못된 token인 경우
   if (decoded == null) {
@@ -12,7 +12,7 @@ const checkAuthorized = async (token) => {
     };
   } else {
     const result = await TokenManager.getExpiredTokenByToken(token);
-    if(result.code == 200) {
+    if(result.code == 200 && isRefreshToken) {
       // 이미 파기된 token인 경우(logout 또는 refresh로 인한 파기)
       return {
         code: 400,
@@ -98,13 +98,13 @@ exports.refresh = async (req, res) => {
     const accessToken = req.headers.authorization.split("Bearer ")[1];
     const refreshToken = req.headers.refresh;
 
-    const accessAuthorizeResult = await checkAuthorized(accessToken);
+    const accessAuthorizeResult = await checkAuthorized(accessToken, false);
     if (accessAuthorizeResult.code != 200) {
       // accessToken이 유효하지 않은 경우
       return res.status(accessAuthorizeResult.code).send(accessAuthorizeResult.data);
     }
 
-    const refreshAuthorizeResult = await checkAuthorized(refreshToken);
+    const refreshAuthorizeResult = await checkAuthorized(refreshToken, true);
     if (refreshAuthorizeResult.code != 200) {
       // refreshToken이 유효하지 않은 경우
       return res.status(refreshAuthorizeResult.code).send(refreshAuthorizeResult.data);

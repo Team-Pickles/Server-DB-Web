@@ -7,13 +7,13 @@ const LoginInfo = {};
 LoginInfo.createInfo = async (id, accessToken, refreshToken) => {
     let loginToken;
     try {
-        loginToken = await sequelize.transaction(async trans => {
-            await model.LoginInfo.create({
+        await sequelize.transaction(async trans => {
+            loginToken = await model.LoginInfo.create({
                 id: id,
                 access_token: accessToken,
                 refresh_token: refreshToken
             }, {transaction: trans});
-        })
+        });
     } catch (err) {
         console.log("createInfo err", err);
     }

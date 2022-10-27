@@ -117,7 +117,7 @@ module.exports = {
         };
         await func();
 
-        if(result !== undefined){
+        if(result === undefined){
             return {
                 code: 400,
                 data: {
