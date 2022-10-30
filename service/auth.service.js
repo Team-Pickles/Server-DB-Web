@@ -3,14 +3,15 @@ const TokenManager = require("../utils/tokenManager");
 const data = require("../utils/getData_utils");
 
 const checkAuthorized = async (token, isRefreshToken) => {
-  const decoded = jwt.decode(token);
+  const verified = jwt.verify(token);
   // 잘못된 token인 경우
-  if (decoded == null) {
+  if (verified.ok === false && verified.message !== "jwt expired") {
     return {
       code: 401,
       data: {message: "No authorized!"}
     };
   } else {
+    const decoded = jwt.decode(token);
     const result = await TokenManager.getExpiredTokenByToken(token);
     if(result.code == 200 && isRefreshToken) {
       // 이미 파기된 token인 경우(logout 또는 refresh로 인한 파기)
@@ -28,9 +29,8 @@ const checkAuthorized = async (token, isRefreshToken) => {
   }
 };
 
-const getNewTokenProcess = (decoded, access, refresh) => {
-  if (access.ok === false&& access.message === "jwt expired") {
-    if (refresh.ok === false)
+const getNewTokenProcess = (decoded, refresh) => {
+  if (refresh.ok === false) {
       // refresh 토큰이 유효하지 않은 경우
       return {
         code: 401,
@@ -39,8 +39,7 @@ const getNewTokenProcess = (decoded, access, refresh) => {
           message: "No authorized!",
         },
       };
-    else {
-      // refresh 토큰이 유효한 경우
+    } else {
       const newAccessToken = jwt.sign(decoded.id);
       return {
         code: 200,
@@ -53,20 +52,6 @@ const getNewTokenProcess = (decoded, access, refresh) => {
         },
       };
     }
-  }
-  else {
-    const newAccessToken = jwt.sign(decoded.id);
-    return {
-      code: 200,
-      result: {
-        ok: true,
-        tokens: [{
-          accessToken: newAccessToken,
-          refreshToken: refresh.token,
-        }]
-      },
-    };
-  }
 };
 
 exports.login = async (req, res) => {
@@ -112,13 +97,10 @@ exports.refresh = async (req, res) => {
       // refreshToken은 유효하지만 각 토큰의 소유자가 다른 경우
       return res.status(400).send({message : "Wrong token"});
     } else {
-      const accessResult = jwt.verify(accessToken);
       const refreshResult = jwt.refreshVerify(refreshToken);
 
       const processResult = getNewTokenProcess(
-        accessAuthorizeResult,
-        accessResult,
-        refreshResult
+        accessAuthorizeResult, refreshResult
       );
 
       if(processResult.code == 200){
