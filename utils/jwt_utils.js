@@ -46,6 +46,10 @@ module.exports = {
         }
     },
     decode: (token) => {
-        return jwt.decode(token);
+        try {
+            return jwt.decode(token);
+        } catch (Err) {
+            return null;
+        }
     }
 }
