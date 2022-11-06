@@ -11,6 +11,7 @@ const authJwt = require("../middleware/authJwt");
 router.put("/apply", map.applyMap);
 router.get("/getAllList", map.getAllMapList);
 router.get("/getListByTag/:map_tag", map.getMapListByTag);
+router.get("/getMapById/:map_id", map.getMapById);
 router.patch("/update", map.updateMapInfo);
 router.delete("/delete/:map_id", authJwt, map.deleteMap);
 
@@ -93,6 +94,47 @@ router.delete("/delete/:map_id", authJwt, map.deleteMap);
  *                   "map_maker": null
  *                 }
  *               ]
+ *       "400":
+ *         $ref: '#/components/responses/ApplyError'
+ */
+
+/**
+ * @swagger
+ * /api/map/getMapById/:map_id:
+ *   get:
+ *     summary: Get map by id
+ *     description: Get map by id
+ *     tags: [Map]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         map_id: map_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Map id
+ *     responses:
+ *       "200":
+ *         description: Ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             properties:
+ *               result:
+ *                 type: object
+ *             example:
+ *                 {
+ *                   "map_id": 1,
+ *                   "map_info": {
+ *                     "example": "example"
+ *                   },
+ *                   "map_tag": "none",
+ *                   "map_grade": 0,
+ *                   "map_difficulty": 0,
+ *                   "map_maker": null
+ *                 }
  *       "400":
  *         $ref: '#/components/responses/ApplyError'
  */

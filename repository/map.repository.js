@@ -31,6 +31,9 @@ Map.findAllMaps = (resultFunc) => {
         attributes: ['map_id', 'map_info', 'map_tag', 'map_grade', 'map_difficulty', 'map_maker']
     }).then((result) => {
         console.log("Find All Maps");
+        result.forEach((value, index, array) => {
+            value.map_info = JSON.stringify(value["map_info"]);
+        });
         return resultFunc(null, result);
     }).catch((err) => {
         console.log("findAllMaps err", err);
@@ -45,9 +48,27 @@ Map.findAllMapsByTag = (map_tag, resultFunc) => {
         attributes: ['map_id', 'map_info', 'map_tag', 'map_grade', 'map_difficulty', 'map_maker']
     }).then((result) => {
         console.log(`Find all maps with map_tag(${map_tag}).`);
+        result.forEach((value, index, array) => {
+            value.map_info = JSON.stringify(value["map_info"]);
+        });
         return resultFunc(null, result);
     }).catch((err) => {
         console.log("findAllMapsByTag err", err);
+        return resultFunc(err, null);
+    });
+}
+
+Map.findMapById = (map_id, resultFunc) => {
+    model.Map.findOne({
+        raw: true,
+        where: {map_id: map_id},
+        attributes: ['map_id', 'map_info', 'map_tag', 'map_grade', 'map_difficulty', 'map_maker']
+    }).then((result) => {
+        console.log(`Find map with map_id(${map_id}).`);
+        result.map_info = JSON.stringify(result["map_info"]);
+        return resultFunc(null, result);
+    }).catch((err) => {
+        console.log("findMapById err", err);
         return resultFunc(err, null);
     });
 }
