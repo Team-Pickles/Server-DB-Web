@@ -1,5 +1,7 @@
 const model = require("../models");
 const sequelize = model.sequelize;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const Map = {};
 
@@ -54,6 +56,23 @@ Map.findAllMapsByTag = (map_tag, resultFunc) => {
         return resultFunc(null, result);
     }).catch((err) => {
         console.log("findAllMapsByTag err", err);
+        return resultFunc(err, null);
+    });
+}
+
+Map.findAllMapsByTagLike = (map_tag, resultFunc) => {
+    model.Map.findAll({
+        raw: true,
+        where: {map_tag: {[Op.like]: "%" + map_tag + "%"}},
+        attributes: ['map_id', 'map_info', 'map_tag', 'map_grade', 'map_difficulty', 'map_maker']
+    }).then((result) => {
+        console.log(`Find all maps with map_tag(${map_tag}).`);
+        result.forEach((value, index, array) => {
+            value.map_info = JSON.stringify(value["map_info"]);
+        });
+        return resultFunc(null, result);
+    }).catch((err) => {
+        console.log("findAllMapsByTagLike err", err);
         return resultFunc(err, null);
     });
 }

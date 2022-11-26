@@ -62,6 +62,24 @@ exports.getMapListByTag = (req, res) => {
   }
 };
 
+exports.getMapListByTagLike = (req, res) => {
+  if (!req.params) {
+    res.status(400).send({
+      message: "req.params can not be empty!",
+    });
+  } else {
+    map.findAllMapsByTagLike(req.params.map_tag, (err, result) => {
+      if (err) {
+        res.status(400).send({
+          message: "getMapListByTagLike err",
+        });
+      } else {
+        res.send(result);
+      }
+    });
+  }
+};
+
 exports.getMapById = (req, res) => {
   if (!req.params) {
     res.status(400).send({
