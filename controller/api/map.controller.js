@@ -10,7 +10,7 @@ const authJwt = require("../middleware/authJwt");
  */
 router.put("/apply", map.applyMap);
 router.get("/getAllList", map.getAllMapList);
-router.get("/getListByTag/:map_tag", map.getMapListByTag);
+router.get("/getListByTag/:map_tag", map.getMapListByTagLike);
 router.get("/getMapById/:map_id", map.getMapById);
 router.patch("/update", map.updateMapInfo);
 router.delete("/delete/:map_id", authJwt, map.deleteMap);
