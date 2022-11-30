@@ -48,7 +48,7 @@ const getNewTokenProcess = (decoded, refresh) => {
           tokens: [{
             accessToken: newAccessToken,
             refreshToken: refresh.token,
-          }]
+          }],
         },
       };
     }
@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
     const accessToken = jwt.sign(result.user.user_id);
     const refreshToken = jwt.refresh(result.user.user_id);
 
-    const tokenResult = await TokenManager.createLoginInfo(user_id, accessToken, refreshToken);
+    const tokenResult = await TokenManager.createLoginInfo(user_id, accessToken, refreshToken, result.user.username);
     return res.status(tokenResult.code).send(tokenResult.data);
   }
 };

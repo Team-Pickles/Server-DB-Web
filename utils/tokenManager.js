@@ -109,7 +109,7 @@ module.exports = {
             };
         }
     },
-    createLoginInfo: async (id, accessToken, refreshToken) => {
+    createLoginInfo: async (id, accessToken, refreshToken, username) => {
         let result;
         const func = async () => {
             const tmp = await LoginInfo.createInfo(id, accessToken, refreshToken);
@@ -133,6 +133,7 @@ module.exports = {
                         accessToken,
                         refreshToken,
                     }],
+                    username: username
                 }
             };
         }
