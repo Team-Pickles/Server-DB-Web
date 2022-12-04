@@ -112,8 +112,17 @@ module.exports = {
     createLoginInfo: async (id, accessToken, refreshToken, username) => {
         let result;
         const func = async () => {
-            const tmp = await LoginInfo.createInfo(id, accessToken, refreshToken);
-            result = tmp;
+            try {
+                const tmp = await LoginInfo.createInfo(id, accessToken, refreshToken);
+                result = tmp;
+            } catch (_e) {
+                return {
+                    code: 400,
+                    data: {
+                        message: "createLoginInfo err"
+                    }
+                };
+            }
         };
         await func();
 
